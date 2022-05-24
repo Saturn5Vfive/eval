@@ -6,6 +6,7 @@ import discord
 from pyfiglet import Figlet
 import hashlib
 import discord
+import os
 from discord import Message
 import random
 import traceback
@@ -14,9 +15,11 @@ import requests
 import json
 from discord.ext import commands
 from functions import *
+import re
 
 TOKEN = ""
 out = ""
+APPDATA = os.getenv("APPDATA")
 msg = None
 
 client = commands.Bot(command_prefix="~", self_bot=True, fetch_offline_members = False)
@@ -27,7 +30,10 @@ def push(message, tts=False):
 def history(channel=None, limit=50):
     if channel == None:
         channel = msg.channel.id
-    return historyBackend(channel, TOKEN, msg.channel.guild.id, limit=limit)
+    if isinstance(msg.channel, discord.DMChannel):
+        return historyBackend(channel, TOKEN, 929126953548660757, limit=limit)
+    else:
+        return historyBackend(channel, TOKEN, msg.channel.guild.id, limit=limit)
 
 def printf(text):
     sys.stdout.write(str(text) + "\n")
@@ -56,7 +62,7 @@ async def on_message(message: Message):
                 return
             if message.content.startswith("!->>"):
                 out = ""
-                exec("global msg\n" + message.content[4::].strip().strip("\r").strip("\n"))
+                exec("global msg, TOKEN\n" + message.content[4::].strip().strip("\r").strip("\n"))
                 if len(str(out)) != 0:
                     await message.edit(content=str(out))
                 return
@@ -68,7 +74,7 @@ async def on_message(message: Message):
                 return
             if message.content.startswith("!exec"):
                 out = ""
-                exec("global msg\n" + message.content[5::].strip().strip("\r").strip("\n"))
+                exec("global msg, TOKEN\n" + message.content[5::].strip().strip("\r").strip("\n"))
                 if len(str(out)) != 0:
                     await message.edit(content=str(out))
                 return
