@@ -27,6 +27,16 @@ client = commands.Bot(command_prefix="~", self_bot=True, fetch_offline_members =
 def push(message, tts=False):
     sendChatMessage(message, msg.channel.guild.id, msg.channel.id, TOKEN, tts)
 
+def edit(message, content, channel=None):
+    if channel == None:
+        channel = msg.channel.id
+    editBackend(message, TOKEN, channel, content)
+
+def delete(message, channel=None):
+    if channel == None:
+        channel = msg.channel.id
+    deleteBackend(message, TOKEN, channel)
+
 def history(channel=None, limit=50):
     if channel == None:
         channel = msg.channel.id
@@ -34,6 +44,9 @@ def history(channel=None, limit=50):
         return historyBackend(channel, TOKEN, 929126953548660757, limit=limit)
     else:
         return historyBackend(channel, TOKEN, msg.channel.guild.id, limit=limit)
+
+def search(text):
+    return searchBackend(msg.channel.guild.id, TOKEN, text)
 
 def printf(text):
     sys.stdout.write(str(text) + "\n")

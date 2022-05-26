@@ -22,6 +22,78 @@ super_properties = {
 }
 
 
+def searchBackend(guild, token, text):
+    headers = {
+        "accept":"*/*", 
+        "accept-encoding": "gzip, deflate, br", 
+        "accept-language": "en-US,en;q=0.9", 
+        "authorization": f"{token}", 
+        "origin":"https://discord.com", 
+        "referer": f"https://discord.com/channels/{guild}/000000000000000000", 
+        "sec-ch-ua":"\" Not;A Brand\";v=\"99\", \"Google Chrome\";v=\"97\", \"Chromium\";v=\"97\"", 
+        "sec-ch-ua-mobile":"?0", 
+        "sec-ch-ua-platform":"\"Windows\"", 
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36",
+        "x-debug-options": "bugReporterEnabled",
+        "x-discord-locale":"en-US",
+        "x-super-properties": base64.b64encode(json.dumps(super_properties).encode('ascii')).decode('ascii')
+    }
+    re = requests.get(f"https://discord.com/api/v9/guilds/{guild}/messages/search?content={text}&include_nsfw=true", headers=headers)
+    return json.loads(re.text)
+
+def editBackend(msg, token, channel, newtext):
+    headers = {
+        "accept":"*/*", 
+        "accept-encoding": "gzip, deflate, br", 
+        "accept-language": "en-US,en;q=0.9", 
+        "authorization": f"{token}", 
+        "origin":"https://discord.com", 
+        "referer": f"https://discord.com/channels/000000000000000000/000000000000000000", 
+        "sec-ch-ua":"\" Not;A Brand\";v=\"99\", \"Google Chrome\";v=\"97\", \"Chromium\";v=\"97\"", 
+        "sec-ch-ua-mobile":"?0", 
+        "content-length":str(len(newtext)),
+        "sec-ch-ua-platform":"\"Windows\"", 
+        "content-type":"application/json",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36",
+        "x-debug-options": "bugReporterEnabled",
+        "x-discord-locale":"en-US",
+        "x-super-properties": base64.b64encode(json.dumps(super_properties).encode('ascii')).decode('ascii')
+    }
+    payload = {
+        "content": newtext
+    }
+    re = requests.patch(f"https://discord.com/api/v9/channels/{channel}/messages/{msg}", headers=headers, json=payload)
+    return json.loads(re.text)
+
+def deleteBackend(msg, token, channel):
+    headers = {
+        "accept":"*/*", 
+        "accept-encoding": "gzip, deflate, br", 
+        "accept-language": "en-US,en;q=0.9", 
+        "authorization": f"{token}", 
+        "origin":"https://discord.com", 
+        "referer": f"https://discord.com/channels/000000000000000000/000000000000000000", 
+        "sec-ch-ua":"\" Not;A Brand\";v=\"99\", \"Google Chrome\";v=\"97\", \"Chromium\";v=\"97\"", 
+        "sec-ch-ua-mobile":"?0", 
+        "sec-ch-ua-platform":"\"Windows\"", 
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36",
+        "x-debug-options": "bugReporterEnabled",
+        "x-discord-locale":"en-US",
+        "x-super-properties": base64.b64encode(json.dumps(super_properties).encode('ascii')).decode('ascii')
+    }
+    #https://discord.com/api/v9/channels/978077574234259487/messages/979238970925928468
+    re = requests.delete(f"https://discord.com/api/v9/channels/{channel}/messages/{msg}", headers=headers)
+
+
 def historyBackend(channel, token, guild_id, limit=50):
     #https://discord.com/api/v9/channels/889246102635806760/messages?limit=50
     headers = {
