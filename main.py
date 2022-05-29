@@ -40,10 +40,7 @@ def delete(message, channel=None):
 def history(channel=None, limit=50):
     if channel == None:
         channel = msg.channel.id
-    if isinstance(msg.channel, discord.DMChannel):
-        return historyBackend(channel, TOKEN, 929126953548660757, limit=limit)
-    else:
-        return historyBackend(channel, TOKEN, msg.channel.guild.id, limit=limit)
+    return historyBackendd(channel, TOKEN, msg.channel.guild.id, limit=limit)
 
 def search(text):
     return searchBackend(msg.channel.guild.id, TOKEN, text)

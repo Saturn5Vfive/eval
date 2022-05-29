@@ -94,7 +94,7 @@ def deleteBackend(msg, token, channel):
     re = requests.delete(f"https://discord.com/api/v9/channels/{channel}/messages/{msg}", headers=headers)
 
 
-def historyBackend(channel, token, guild_id, limit=50):
+def historyBackendd(channel, token, guild_id, limit=50):
     #https://discord.com/api/v9/channels/889246102635806760/messages?limit=50
     headers = {
         "accept":"*/*", 
